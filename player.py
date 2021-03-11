@@ -59,4 +59,12 @@ class GeniusComputerPlayer(Player):
 
     def minimax(self, state, player): # 'state' (not 'game') b/c it's a screenshot of the game at that moment.
         max_player = self.letter # IOW, you as the X want to maximize yourself.
-        other_player = 'O' if player == 'X' else 'X' # makes sure other player is *not* you.
+        other_player = 'O' if player == 'X' else 'X' # makes sure other player is *not* you. ('Else" is probably not necessary)
+
+        # check if the previous move won the game 
+        # with recursion, we need a base case
+        # have any of the states we passed in produced a winner?
+        if state.current_winner == other_player: # return it as a dictionary
+            return {'position': None,                 # <- why is this 'None'?
+                    'score': 1 * (state.num_empty_squares())
+                    } # <- the minimax score
