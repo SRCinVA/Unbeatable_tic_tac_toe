@@ -65,6 +65,13 @@ class GeniusComputerPlayer(Player):
         # with recursion, we need a base case
         # have any of the states we passed in produced a winner?
         if state.current_winner == other_player: # return it as a dictionary
-            return {'position': None,                 # <- why is this 'None'?
-                    'score': 1 * (state.num_empty_squares())
-                    } # <- the minimax score
+            return {'position': None,                 # <- "None" because nobody is moving
+                    'score': 1 * (state.num_empty_squares() + 1) if other_player == max_player else -1 * (state.num_empty_squares() + 1)
+                    } # <- the minimax score function. Struggling with this idea.
+
+        elif not state.empty_squares(): # if nobody has won AND there are no empty squares, then it's a tie
+            return {'position':None, 'score': 0} # none because nobody is moving.
+
+        # now to get into the algorithm:
+        if player == max_player:
+            
