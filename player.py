@@ -54,24 +54,30 @@ class GeniusComputerPlayer(Player):
         if len(game.available_moves()) == 9:
             square = random.choice(game.available_moves()) # it will randomly choose a spot
         else:  # for each subsequent move ...
-            square = self.minimax(game, self.letter) # ... use minimax for square choice
+            square = self.minimax(game, self.letter) # ... use minimax for square choice. Note that it's recursive.
         return square
 
-    def minimax(self, state, player): # 'state' (not 'game') b/c it's a screenshot of the game at that moment.
+    def minimax(self, state, player): # 'state' (not 'game') b/c it's a snapshot of the game at that moment (presumably not the game as an entirety).
         max_player = self.letter # IOW, you as the X want to maximize yourself.
-        other_player = 'O' if player == 'X' else 'X' # makes sure other player is *not* you. ('Else" is probably not necessary)
-
+        other_player = 'O' if player == 'X' else 'X'    # makes sure other_player and you aren't the same. 'else X' means: "well, what if "player" *isn't* X? Then "other_player" *definitely* is!!" 
+        
         # check if the previous move won the game 
-        # with recursion, we need a base case
-        # have any of the states we passed in produced a winner?
+        # recursion requires a base case: have any previous states produced a winner?
+        # we need to keep track of position AND score for minimax to work
         if state.current_winner == other_player: # return it as a dictionary
-            return {'position': None,                 # <- "None" because nobody is moving
+            return {'position': None,                 # <- "None" because nobody is moving (or just to initiaize?)
                     'score': 1 * (state.num_empty_squares() + 1) if other_player == max_player else -1 * (state.num_empty_squares() + 1)
-                    } # <- the minimax score function. Struggling with this idea.
+                    } # <- the minimax score function. Don't understand her explanation.
 
         elif not state.empty_squares(): # if nobody has won AND there are no empty squares, then it's a tie
-            return {'position':None, 'score': 0} # none because nobody is moving.
+            return {'position':None, 'score': 0} # none because nobody is moving (or because we're just initializing?)
 
-        # now to get into the algorithm:
+        # now the algorithm:
         if player == max_player:
-            
+            best = {'position': None, 'score': -math.inf}  # a dictionary that preserves the best postiion and score
+                                                            # initialize the score to negative infinity so that one iteration beats that score; by definition it is higher.
+        else: 
+            best = {'position': None, 'score': math.inf} # here, we're trying to minimize, so start at positive infinity.
+        
+        for possible_move in state.available_move():
+            # step 1: make a move and try that spot.
