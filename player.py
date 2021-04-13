@@ -79,5 +79,16 @@ class GeniusComputerPlayer(Player):
         else: 
             best = {'position': None, 'score': math.inf} # here, we're trying to minimize, so start at positive infinity.
         
-        for possible_move in state.available_move():
+        for possible_move in state.available_moves():
             # step 1: make a move and try that spot.
+            state.make_move(possible_move, player)
+            # step 2: recurse using minimax to simulate a game after making that move.
+            sim_score = self.minimax(state, other_player) # then, alternate the players.
+            # question: how does that alternating take place in the above code?
+            # step 3: undo that move (so we could try the next one in a future iteration)
+            state.board[possible_move] = ' ' # we reset that point on the board to an empty space.
+            state.current_winner = None      # this undoes whatever move you just did. 
+            sim  
+            # step 4: update the dictionary if necessary (meaning, if you produced a better move, thus beating the current best score).
+
+        
