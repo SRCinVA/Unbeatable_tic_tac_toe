@@ -85,10 +85,16 @@ class GeniusComputerPlayer(Player):
             # step 2: recurse using minimax to simulate a game after making that move.
             sim_score = self.minimax(state, other_player) # then, alternate the players.
             # question: how does that alternating take place in the above code?
+            
             # step 3: undo that move (so we could try the next one in a future iteration)
             state.board[possible_move] = ' ' # we reset that point on the board to an empty space.
             state.current_winner = None      # this undoes whatever move you just did. 
-            sim  
+            sim_score['position'] = possible_move # otherwise, gets messed up from recursion (???)
+            
             # step 4: update the dictionary if necessary (meaning, if you produced a better move, thus beating the current best score).
-
-        
+            if player == max_player:
+                if sim_score['score'] > best['score']:
+                    best = sim_score # then replace that score with the new one if it's better
+            else: # meaning, your player is the min player
+                if sim_score['score'] < best['score']:
+                    best = sim_score  # were trying to maximize the max player and minimize the min
