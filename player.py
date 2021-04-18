@@ -54,7 +54,7 @@ class GeniusComputerPlayer(Player):
         if len(game.available_moves()) == 9:
             square = random.choice(game.available_moves()) # it will randomly choose a spot
         else:  # for each subsequent move ...
-            square = self.minimax(game, self.letter) # ... use minimax for square choice. Note that it's recursive.
+            square = self.minimax(game, self.letter)['position']# ... use minimax for square choice. Note that it's recursive.
         return square
 
     def minimax(self, state, player): # 'state' (not 'game') b/c it's a snapshot of the game at that moment (presumably not the game as an entirety).
@@ -97,4 +97,10 @@ class GeniusComputerPlayer(Player):
                     best = sim_score # then replace that score with the new one if it's better
             else: # meaning, your player is the min player
                 if sim_score['score'] < best['score']:
-                    best = sim_score  # were trying to maximize the max player and minimize the min
+                    best = sim_score  # we're trying to maximize the max player and minimize the min
+        
+        return best
+            # after we've tired all of these, the 'best' dictionary will contain the
+            # best possible next move and the score that would arise from it.
+            # she added [position] to get_move() to index that dictionary. No explanation as to how that works.
+        
